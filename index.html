@@ -40,10 +40,41 @@
         <h1>Chào mừng bạn đến với trang của tôi!</h1>
         <p>Nội dung này sẽ được chụp khi bạn nhấn nút "Chia sẻ".</p>
     </div>
+    <button id="saveBtn">Lưu kết quả</button>
     <button id="shareBtn">Chia sẻ</button>
 
     <script>
         document.getElementById('shareBtn').addEventListener('click', async function () {
+            const captureArea = document.getElementById("content");
+
+            try {
+                // Chụp màn hình khu vực cần thiết
+                const canvas = await html2canvas(captureArea, { useCORS: true, scale: 2 });
+                const dataUrl = canvas.toDataURL("image/png");
+
+                // Chuyển Base64 sang file blob
+                const response = await fetch(dataUrl);
+                const blob = await response.blob();
+                const file = new File([blob], `${imgFileName}.png`, { type: "image/png" });
+
+                // Kiểm tra nếu Web Share API được hỗ trợ
+                if (navigator.share) {
+                    await navigator.share({
+                        title: 'Thông báo giao dịch',
+                        text: 'Chia sẻ thông báo giao dịch',
+                        files: [file], // Chia sẻ file ảnh
+                    });
+                    console.log("Chia sẻ thành công!");
+                } else {
+                    console.log('Navigator share not support');
+                    //alert("Trình duyệt không hỗ trợ chia sẻ hình ảnh.");
+                }
+            } catch (error) {
+                console.error("Có lỗi xảy ra khi chụp màn hình hoặc chia sẻ:", error);
+            }
+        });
+
+        document.getElementById('saveBtn').addEventListener('click', async function () {
             // Lấy phần tử cần chụp
             const captureArea = document.getElementById("content");
             try {
