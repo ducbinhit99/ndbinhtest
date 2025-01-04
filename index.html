@@ -55,7 +55,7 @@
                 // Chuyển Base64 sang file blob
                 const response = await fetch(dataUrl);
                 const blob = await response.blob();
-                const file = new File([blob], `${imgFileName}.png`, { type: "image/png" });
+                const file = new File([blob], `imagetest.png`, { type: "image/png" });
 
                 // Kiểm tra nếu Web Share API được hỗ trợ
                 if (navigator.share) {
