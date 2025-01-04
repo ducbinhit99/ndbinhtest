@@ -48,57 +48,77 @@
     <button id="shareBtn1">Chia sẻ1</button>
 
     <script>
-        document.getElementById('shareBtn').addEventListener('click', async function () {
-            const captureArea = document.getElementById("content");
+        // Chụp màn hình khu vực cần thiết
+        const canvas = await html2canvas(captureArea, { useCORS: true, scale: 2 });
+        const dataUrl = canvas.toDataURL("image/png");
 
-            try {
-                // Chụp màn hình khu vực cần thiết
-                const canvas = await html2canvas(captureArea, { useCORS: true, scale: 2 });
-                const dataUrl = canvas.toDataURL("image/png");
+        // Chuyển Base64 sang file blob
+        const response = await fetch(dataUrl);
+        const blob = await response.blob();
+        const file = new File([blob], `imagetest.png`, { type: "image/png" });
 
-                // Chuyển Base64 sang file blob
-                const response = await fetch(dataUrl);
-                const blob = await response.blob();
-                const file = new File([blob], `imagetest.png`, { type: "image/png" });
+        // Tạo DataTransfer và thêm tệp
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
 
-                // Tạo DataTransfer và thêm tệp
-                const dataTransfer = new DataTransfer();
-                dataTransfer.items.add(file);
+        // Gán FileList vào input file
+        const hiddenInput = document.getElementById('fileInput');
+        hiddenInput.files = dataTransfer.files;
 
-                // Gán FileList vào input file
-                const hiddenInput = document.getElementById('fileInput');
-                hiddenInput.files = dataTransfer.files;
+        const file_input = document.querySelector('#fileInput');
+        const files = file_input.disabled ? undefined : file_input.files;
 
-                const file_input = document.querySelector('#fileInput');
-                const files = file_input.disabled ? undefined : file_input.files;
-                document.getElementById('shareBtn1').click();
+        // document.getElementById('shareBtn').addEventListener('click', async function () {
+        //     const captureArea = document.getElementById("content");
 
-                // try {
-                //     await navigator.share({
-                //         files, title: 'Thông báo giao dịch',
-                //         text: 'Chia sẻ thông báo giao dịch'
-                //     });
-                //     logText('Successfully sent share');
-                // } catch (error) {
-                //     console.log(error);
-                // }
+        //     try {
+        //         // Chụp màn hình khu vực cần thiết
+        //         const canvas = await html2canvas(captureArea, { useCORS: true, scale: 2 });
+        //         const dataUrl = canvas.toDataURL("image/png");
 
-                // // Kiểm tra nếu Web Share API được hỗ trợ
-                // if (navigator.share) {
-                //     await navigator.share({
-                //         title: 'Thông báo giao dịch',
-                //         text: 'Chia sẻ thông báo giao dịch',
-                //         files: files//[file], // Chia sẻ file ảnh
-                //     });
-                //     console.log("Chia sẻ thành công!");
-                // } else {
-                //     console.log('Navigator share not support');
-                //     //alert("Trình duyệt không hỗ trợ chia sẻ hình ảnh.");
-                // }
-            } catch (error) {
-                console.error("Có lỗi xảy ra khi chụp màn hình hoặc chia sẻ:", error);
-            }
-        });
+        //         // Chuyển Base64 sang file blob
+        //         const response = await fetch(dataUrl);
+        //         const blob = await response.blob();
+        //         const file = new File([blob], `imagetest.png`, { type: "image/png" });
+
+        //         // Tạo DataTransfer và thêm tệp
+        //         const dataTransfer = new DataTransfer();
+        //         dataTransfer.items.add(file);
+
+        //         // Gán FileList vào input file
+        //         const hiddenInput = document.getElementById('fileInput');
+        //         hiddenInput.files = dataTransfer.files;
+
+        //         const file_input = document.querySelector('#fileInput');
+        //         const files = file_input.disabled ? undefined : file_input.files;
+        //         document.getElementById('shareBtn1').click();
+
+        //         // try {
+        //         //     await navigator.share({
+        //         //         files, title: 'Thông báo giao dịch',
+        //         //         text: 'Chia sẻ thông báo giao dịch'
+        //         //     });
+        //         //     logText('Successfully sent share');
+        //         // } catch (error) {
+        //         //     console.log(error);
+        //         // }
+
+        //         // // Kiểm tra nếu Web Share API được hỗ trợ
+        //         // if (navigator.share) {
+        //         //     await navigator.share({
+        //         //         title: 'Thông báo giao dịch',
+        //         //         text: 'Chia sẻ thông báo giao dịch',
+        //         //         files: files//[file], // Chia sẻ file ảnh
+        //         //     });
+        //         //     console.log("Chia sẻ thành công!");
+        //         // } else {
+        //         //     console.log('Navigator share not support');
+        //         //     //alert("Trình duyệt không hỗ trợ chia sẻ hình ảnh.");
+        //         // }
+        //     } catch (error) {
+        //         console.error("Có lỗi xảy ra khi chụp màn hình hoặc chia sẻ:", error);
+        //     }
+        // });
 
         document.getElementById('shareBtn1').addEventListener('click', async function () {
             const file_input = document.querySelector('#fileInput');
