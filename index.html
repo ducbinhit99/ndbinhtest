@@ -1,88 +1,105 @@
-<!-- This work is licensed under the W3C Software and Document License
-     (http://www.w3.org/Consortium/Legal/2015/copyright-software-and-document).
-  -->
-  <!DOCTYPE html>
-  <html>
-  
-  <head>
-      <title>
-          Web Share Test
-      </title>
-      <meta name="viewport" content="width=device-width">
-      <style>
-          .error {
-              color: #d22;
-          }
-  
-          input[type="button"] {
-              height: 30px
-          }
-      </style>
-  </head>
-  
-  <body>
-      <h1>
-          Web Share Test
-      </h1>
-      <table>
-          <tr>
-              <td>
-                  Files:
-              </td>
-              <td>
-                  <!--Without column 2, the whole table is small on mobile.-->
-              </td>
-              <td>
-                  <input id="files" type="file" multiple>
-              </td>
-          </tr>
-      </table>
-      <p>
-          <input id="share" type="button" value="Share">
-      </p>
-      <div id="output"></div>
-      <script>
-          'use strict';
-  
-          function checkboxChanged(e) {
-              const checkbox = e.target;
-              const textfield = document.querySelector('#' + checkbox.id.split('_')[0]);
-  
-              textfield.disabled = !checkbox.checked;
-              if (!checkbox.checked)
-                  textfield.value = '';
-          }
-  
-          async function testWebShare() {
-              const file_input = document.querySelector('#files');
-              const files = file_input.disabled ? undefined : file_input.files;
-  
-              try {
-                  await navigator.share({
-                      files, title: 'Thông báo giao dịch',
-                      text: 'Chia sẻ thông báo giao dịch'
-                  });
-                  logText('Successfully sent share');
-              } catch (error) {
-                  logError('Error sharing: ' + error);
-              }
-          }
-  
-          function onLoad() {
-              document.querySelector('#share').addEventListener('click', testWebShare);
-              if (navigator.share === undefined) {
-                  if (window.location.protocol === 'http:') {
-                      // navigator.share() is only available in secure contexts.
-                      window.location.replace(window.location.href.replace(/^http:/, 'https:'));
-                  } else {
-                      logError('Error: You need to use a browser that supports this draft ' +
-                          'proposal.');
-                  }
-              }
-          }
-  
-          window.addEventListener('load', onLoad);
-      </script>
-  </body>
-  
-  </html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chụp màn hình và lưu</title>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas-pro@1.5.8/dist/html2canvas-pro.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #content {
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="content">
+        <h1>Chào mừng bạn đến với trang của tôi!</h1>
+        <p>Nội dung này sẽ được chụp khi bạn nhấn nút "Chia sẻ".</p>
+        <input id="files" type="file" multiple>
+    </div>
+    <button id="saveBtn">Lưu kết quả</button>
+    <button id="shareBtn">Chia sẻ</button>
+
+    <script>
+        document.getElementById('shareBtn').addEventListener('click', async function () {
+            const captureArea = document.getElementById("content");
+
+            try {
+                // Chụp màn hình khu vực cần thiết
+                const canvas = await html2canvas(captureArea, { useCORS: true, scale: 2 });
+                const dataUrl = canvas.toDataURL("image/png");
+
+                // Chuyển Base64 sang file blob
+                const response = await fetch(dataUrl);
+                const blob = await response.blob();
+                const file = new File([blob], `imagetest.png`, { type: "image/png" });
+
+                const file_input = document.querySelector('#files');
+                const files1 = file_input.disabled ? undefined : file_input.files;
+
+                debugger
+                // Kiểm tra nếu Web Share API được hỗ trợ
+                if (navigator.share) {
+                    await navigator.share({
+                        title: 'Thông báo giao dịch',
+                        text: 'Chia sẻ thông báo giao dịch',
+                        files: files1//[file], // Chia sẻ file ảnh
+                    });
+                    console.log("Chia sẻ thành công!");
+                } else {
+                    console.log('Navigator share not support');
+                    //alert("Trình duyệt không hỗ trợ chia sẻ hình ảnh.");
+                }
+            } catch (error) {
+                console.error("Có lỗi xảy ra khi chụp màn hình hoặc chia sẻ:", error);
+            }
+        });
+
+        document.getElementById('saveBtn').addEventListener('click', async function () {
+            // Lấy phần tử cần chụp
+            const captureArea = document.getElementById("content");
+            try {
+                // Chụp màn hình khu vực cần thiết
+                const canvas = await html2canvas(captureArea, { useCORS: true, scale: 2 });
+                const dataUrl = canvas.toDataURL("image/png");
+
+                // Tạo một link để tải ảnh
+                const downloadLink = document.createElement("a");
+                downloadLink.href = dataUrl;
+                downloadLink.download = `imagetest.png`; // Tên file khi tải về
+                document.body.appendChild(downloadLink); // Thêm link tạm thời vào DOM
+                downloadLink.click(); // Kích hoạt tải file
+                document.body.removeChild(downloadLink); // Xóa link sau khi tải xong
+            } catch (error) {
+                console.error("Có lỗi xảy ra khi chụp màn hình hoặc tải ảnh:", error);
+            }
+
+        });
+    </script>
+</body>
+
+</html>
