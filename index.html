@@ -49,7 +49,7 @@
 
     <script>
         document.getElementById('shareBtn1').addEventListener('click', async function () {
-            const file_input = document.querySelector('#files');
+            const file_input = document.querySelector('#fileInput');
             const files = file_input.disabled ? undefined : file_input.files;
             debugger
             try {
@@ -86,15 +86,15 @@
                 const file_input = document.querySelector('#fileInput');
                 const files = file_input.disabled ? undefined : file_input.files;
 
-                try {
-                    await navigator.share({
-                        files, title: 'Thông báo giao dịch',
-                        text: 'Chia sẻ thông báo giao dịch'
-                    });
-                    logText('Successfully sent share');
-                } catch (error) {
-                    console.log(error);
-                }
+                // try {
+                //     await navigator.share({
+                //         files, title: 'Thông báo giao dịch',
+                //         text: 'Chia sẻ thông báo giao dịch'
+                //     });
+                //     logText('Successfully sent share');
+                // } catch (error) {
+                //     console.log(error);
+                // }
 
                 // // Kiểm tra nếu Web Share API được hỗ trợ
                 // if (navigator.share) {
