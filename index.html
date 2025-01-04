@@ -43,8 +43,23 @@
     </div>
     <button id="saveBtn">Lưu kết quả</button>
     <button id="shareBtn">Chia sẻ</button>
+    <button id="shareBtn1">Chia sẻ1</button>
 
     <script>
+        document.getElementById('shareBtn1').addEventListener('click', async function () {
+            const file_input = document.querySelector('#files');
+            const files = file_input.disabled ? undefined : file_input.files;
+            debugger
+            try {
+                await navigator.share({
+                    files, title: 'Thông báo giao dịch',
+                    text: 'Chia sẻ thông báo giao dịch'
+                });
+                logText('Successfully sent share');
+            } catch (error) {
+                console.log(error);
+            }
+        });
         document.getElementById('shareBtn').addEventListener('click', async function () {
             const captureArea = document.getElementById("content");
 
@@ -58,16 +73,12 @@
                 const blob = await response.blob();
                 const file = new File([blob], `imagetest.png`, { type: "image/png" });
 
-                const file_input = document.querySelector('#files');
-                const files1 = file_input.disabled ? undefined : file_input.files;
-
-                debugger
                 // Kiểm tra nếu Web Share API được hỗ trợ
                 if (navigator.share) {
                     await navigator.share({
                         title: 'Thông báo giao dịch',
                         text: 'Chia sẻ thông báo giao dịch',
-                        files: files1//[file], // Chia sẻ file ảnh
+                        files: [file], // Chia sẻ file ảnh
                     });
                     console.log("Chia sẻ thành công!");
                 } else {
