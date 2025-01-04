@@ -51,7 +51,6 @@
         document.getElementById('shareBtn1').addEventListener('click', async function () {
             const file_input = document.querySelector('#fileInput');
             const files = file_input.disabled ? undefined : file_input.files;
-            debugger
             try {
                 await navigator.share({
                     files, title: 'Thông báo giao dịch',
@@ -85,6 +84,7 @@
 
                 const file_input = document.querySelector('#fileInput');
                 const files = file_input.disabled ? undefined : file_input.files;
+                document.getElementById('shareBtn1').click();
 
                 // try {
                 //     await navigator.share({
