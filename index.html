@@ -48,19 +48,6 @@
     <button id="shareBtn1">Chia sẻ1</button>
 
     <script>
-        document.getElementById('shareBtn1').addEventListener('click', async function () {
-            const file_input = document.querySelector('#fileInput');
-            const files = file_input.disabled ? undefined : file_input.files;
-            try {
-                await navigator.share({
-                    files, title: 'Thông báo giao dịch',
-                    text: 'Chia sẻ thông báo giao dịch'
-                });
-                logText('Successfully sent share');
-            } catch (error) {
-                console.log(error);
-            }
-        });
         document.getElementById('shareBtn').addEventListener('click', async function () {
             const captureArea = document.getElementById("content");
 
@@ -110,6 +97,20 @@
                 // }
             } catch (error) {
                 console.error("Có lỗi xảy ra khi chụp màn hình hoặc chia sẻ:", error);
+            }
+        });
+
+        document.getElementById('shareBtn1').addEventListener('click', async function () {
+            const file_input = document.querySelector('#fileInput');
+            const files = file_input.disabled ? undefined : file_input.files;
+            try {
+                await navigator.share({
+                    files, title: 'Thông báo giao dịch',
+                    text: 'Chia sẻ thông báo giao dịch'
+                });
+                logText('Successfully sent share');
+            } catch (error) {
+                console.log(error);
             }
         });
 
