@@ -49,25 +49,6 @@
 
     <script>
         document.getElementById('shareBtn1').addEventListener('click', async function () {
-            const captureArea = document.getElementById("content");
-            // Chụp màn hình khu vực cần thiết
-            const canvas = await html2canvas(captureArea, { useCORS: true, scale: 2 });
-            const dataUrl = canvas.toDataURL("image/png");
-
-            // Chuyển Base64 sang file blob
-            const response = await fetch(dataUrl);
-            const blob = await response.blob();
-            const file = new File([blob], `imagetest.png`, { type: "image/png" });
-
-            // Tạo DataTransfer và thêm tệp
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-
-            // Gán FileList vào input file
-            const hiddenInput = document.getElementById('fileInput');
-            hiddenInput.files = dataTransfer.files;
-
-
             const file_input = document.querySelector('#fileInput');
             const files = file_input.disabled ? undefined : file_input.files;
             debugger
