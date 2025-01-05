@@ -1,167 +1,521 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chụp màn hình và lưu</title>
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas-pro@1.5.8/dist/html2canvas-pro.min.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JetPay Payment</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            text-align: center;
-        }
 
-        #content {
-            padding: 20px;
-            border: 1px solid #ddd;
-            margin-bottom: 20px;
-        }
+    <!-- Microsoft clarity -->
+    <script type="text/javascript">
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+        })(window, document, "clarity", "script", "i9rpb0nxib");
+    </script>
 
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DTRKP1GFS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+        gtag('config', 'G-4DTRKP1GFS');
+    </script>
+
 </head>
 
 <body>
-    <div id="content">
-        <h1>Chào mừng bạn đến với trang của tôi!</h1>
-        <p>Nội dung này sẽ được chụp khi bạn nhấn nút "Chia sẻ".</p>
-        <input id="files" type="file" multiple>
-        <input type="file" id="fileInput" multiple>
+    <div class="z-container ">
+        <div class="z-container-overlay"></div>
+        <main class="main" role="main">
 
+            <style>
+                .z-container-overlay {
+                    background: unset !important;
+                }
+
+                .jp-presult-container {
+                    padding: 24px 0px;
+                }
+
+                .jp-presult-container .jp-title-box {
+                    margin-bottom: 20px !important;
+                }
+
+                .jp-presult-container .jp-title-label {
+                    color: #141414 !important;
+                }
+
+                .container-content {
+                    padding-left: 0px;
+                    padding-right: 0px;
+                    background-color: #f2f4f6;
+                    font-family: "Arial";
+                }
+
+                .jp-checkout-padding {
+                    padding: 16px;
+                }
+
+                .btn-disabled {
+                    opacity: 0.56;
+                }
+
+                a:hover {
+                    text-decoration: none;
+                }
+
+                .jp-presult-content-box {
+                    /* width: 83%; */
+                    margin: auto;
+                    margin-bottom: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                    width: 70%;
+                }
+
+                .jp-presult-content-box_info {
+                    padding-left: 16px;
+                    padding-right: 12px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+
+                .jp-checkout-tab-info {
+                    width: 100%;
+                    background-color: #fff;
+                    /* width: 70%; */
+                    margin: auto;
+                    border-radius: 20px;
+                }
+
+                /* header */
+                .jp-presult-header {
+                    display: flex;
+                    flex-direction: column;
+                    text-align: center;
+                    align-items: center;
+                    gap: 4px;
+                }
+
+                .jp-presult-header .jp-presult-header_icon {
+                    height: 112px;
+                    margin-bottom: 8px;
+                }
+
+                .jp-presult-header .jp-presult-header_title {
+                    font-family: "GoogleSans Bold";
+                    font-size: 16px;
+                    color: #141414;
+                }
+
+                .jp-presult-header .jp-presult-header_amount {
+                    font-family: "GoogleSans Bold";
+                    font-size: 28px;
+                    color: #06B902;
+                }
+
+                .jp-presult-header .jp-presult-header_time {
+                    /* font-family: "GoogleSans Bold"; */
+                    font-size: 12px;
+                    color: #686C7A;
+                }
+
+                /* end header */
+
+                /* Hình thức thanh toán */
+
+                .jp-checkout-payment-method {}
+
+                .jp-checkout-payment-method-menu {
+                    margin: unset;
+                    row-gap: 8px;
+                }
+
+                .jp-checkout-payment-method-menu .jp-payment-method-item-container {
+                    padding: 0px;
+                }
+
+                .jp-checkout-payment-method-menu .jp-payment-method-item-container:not(:nth-child(2n)) {
+                    padding-right: 6px;
+                    /* Áp dụng padding-right cho phần tử đầu tiên trong mỗi hàng */
+                }
+
+                .jp-checkout-payment-method-menu .jp-payment-method-item-container:nth-child(2n) {
+                    padding-left: 6px;
+                    /* Áp dụng padding-left cho phần tử thứ hai trong mỗi hàng */
+                }
+
+                .jp-checkout-payment-method-menu .jp-payment-method-item {
+                    border: 1px solid #E0E2ED;
+                    padding: 8px;
+                    margin: unset;
+                    border-radius: 12px;
+                    font-family: 'GoogleSans Bold';
+                }
+
+                .jp-checkout-payment-method-menu .jp-payment-method-item .jp-checkout-checkboxpayment {
+                    position: unset;
+                    width: 20px;
+                    height: 20px;
+                    border: 2px solid #141414
+                }
+
+
+                .jp-checkout-payment-method-menu .jp-payment-method-item .jp-checkout-checkboxpayment:checked {
+                    background-color: #06b902;
+                    border: 3px solid green;
+                    box-shadow: none;
+                }
+
+                /* end Hình thức thanh toán */
+
+
+
+                /* info student- hiển thị khi không có đợt thu */
+                .info-student-group {}
+
+                .info-student-group .info-student {
+                    display: flex;
+                    flex-direction: column;
+                    row-gap: 8px;
+                }
+
+                .info-student-group .info-name {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 12px;
+                }
+
+                .info-student-group .info-student-title {
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 300;
+                    color: #141414;
+                    text-wrap: nowrap;
+                }
+
+                .info-student-group .info-student-value {
+                    font-size: 14px;
+                    font-family: 'GoogleSans Bold';
+                    color: #141414;
+                    text-align: right;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .info-student-group #message-student {
+                    color: #0065FC;
+                    display: flex;
+                    padding: 12px;
+                    flex-direction: column;
+                    border-radius: 12px;
+                    background: rgba(0, 101, 252, 0.08);
+                }
+
+                .jp-cko-title-des {
+                    font-size: 12px;
+                    color: #686C7A;
+                    font-family: 'GoogleSans Regular';
+                }
+
+                .info-student-group_line {
+                    width: 100%;
+                    border-top: 1px dashed #D5D8DF;
+                    margin: 16px 0px;
+                }
+
+                .info-btn-group {
+                    margin-top: 16px;
+                }
+
+                /* end */
+
+                /* footer */
+                .jp-presult-footer {
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .jp-presult-footer .jp-presult-btn {
+                    display: flex;
+                    justify-content: center;
+                    gap: 8px;
+                    cursor: pointer;
+                    width: fit-content;
+                    background-color: #2AAF42;
+                    border: unset;
+                    border-radius: 12px;
+                    padding: 10px 24px;
+                    font-size: 14px;
+                    color: #ffffff;
+                    width: 49%;
+                    font-family: "GoogleSans Bold";
+                }
+
+                .jp-presult-btn.btn-info-result {
+                    background: var(--gray-transparent-8, rgba(156, 159, 172, 0.08));
+                    color: #141414;
+                }
+
+                /* end footer */
+
+                /* dialog */
+                .dialog {
+                    position: fixed;
+                    inset: 0 0 0 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 9999;
+                }
+
+                .dialog.hide {
+                    display: none;
+                }
+
+                .dialog .dialog-bg {
+                    position: absolute;
+                    background-color: #000;
+                    inset: 0 0 0 0;
+                    opacity: 0.8;
+                }
+
+                .dialog .dialog-modal {
+                    width: 640px;
+                    background-color: #fff;
+                    border-radius: 8px;
+                    z-index: 1;
+                    padding: 16px;
+                    margin: 0px 3px 150px 3px;
+                }
+
+                .dialog .img-guidechoosesisap {
+                    width: 100%;
+                }
+
+                /* end dialog */
+                @media (max-width: 992px) {
+                    .jp-presult-content-box {
+                        flex-direction: column;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .container-content {
+                        margin-bottom: 102px;
+                    }
+
+                    .jp-checkout-padding {
+                        padding: 16px;
+                    }
+
+                    /* header */
+                    .jp-presult-header .jp-presult-header_icon {
+                        height: 60px;
+                    }
+
+                    .jp-presult-header .jp-presult-header_title {
+                        font-size: 16px;
+                    }
+
+                    .jp-presult-header .jp-presult-header_amount {
+                        font-size: 20px;
+                    }
+
+                    /* end header */
+
+                    .jp-presult-content-box {
+                        width: 100%;
+                    }
+
+                    .jp-checkout-money-custom-box {
+                        position: fixed;
+                        bottom: 0px;
+                        left: 0;
+                        right: 0;
+                        background-color: #ffffff;
+                        padding: 16px;
+                    }
+
+                    .jp-payment-method-item-container {
+                        padding: unset !important;
+                    }
+
+                    .footer {
+                        display: none;
+                    }
+
+                    .jp-checkout-tab-info .jp-checkout-header {
+                        font-size: 14px;
+                    }
+
+                    .jp-presult-footer {
+                        flex-direction: column-reverse;
+                        gap: 8px;
+                        position: fixed;
+                        bottom: 0px;
+                        left: 0;
+                        right: 0;
+                        background-color: #ffffff;
+                        padding: 16px;
+                    }
+
+                    .jp-presult-footer .jp-presult-btn {
+                        width: 100%;
+                    }
+                }
+
+                @media (max-width: 385px) {}
+            </style>
+
+
+            <div class="container container-content jp-presult-container" id="transactionResultJP">
+                <div class="jp-presult-content-box">
+                    <div class="jp-presult-content-box_info">
+                        <div class="jp-presult-header">
+                            <img src="https://testdcwebsitepayment.jetpay.vn/jetpaylibs/images/icons/ic-payment-success.svg?v=36.1.21"
+                                alt="" class="jp-presult-header_icon" />
+                            <div class="jp-presult-header_title">
+                                Thanh toán thành công
+                            </div>
+                            <div class="jp-presult-header_amount">1.000.000 đ</div>
+                            <div class="jp-presult-header_time">17:46 03/01/2025</div>
+                        </div>
+                        <div class="jp-checkout-tab-info">
+                            <div class="jp-checkout-padding">
+                                <div class="info-student-group">
+                                    <div class="info-student text-responsive">
+                                        <div class="info-name">
+                                            <div class="info-student-title mb-1">
+                                                H&#x1ECD;c vi&#xEA;n
+                                            </div>
+                                            <div class="info-student-value">Nguyễn Đức Bình
+                                            </div>
+                                        </div>
+
+                                        <div class="info-name">
+                                            <div class="info-student-title">
+                                                Mã học viên
+                                            </div>
+                                            <div class="info-student-value">NDBINH001</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="info-student-group_line"></div>
+                                <div class="info-student-group">
+                                    <div class="info-student text-responsive">
+                                        <div class="info-name">
+                                            <div class="info-student-title">
+                                                Hình thức thanh toán
+                                            </div>
+                                            <div class="info-student-value">QR Code</div>
+                                        </div>
+                                        <div class="info-name">
+                                            <div class="info-student-title">
+                                                Nội dung thanh toán
+                                            </div>
+                                            <div class="info-student-value">DTT00001 THANH TOAN</div>
+                                        </div>
+                                        <div class="info-name">
+                                            <div class="info-student-title mb-1">
+                                                Mã giao dịch
+                                            </div>
+                                            <div class="info-student-value">JETPAY_202501031746273300_1</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="jp-checkout-tab-info jp-checkout-payment-method">
+                            <div class="jp-checkout-padding">
+                                <div style="margin-bottom: 8px; font-size: 14px;">Đợt thu</div>
+                                <div class="info-student-group">
+                                    <div class="row jp-checkout-payment-method-menu">
+                                        <div class="col-sm-12 col-md-6 jp-payment-method-item-container">
+                                            <div class="jp-payment-method-item s-button-border jp-method">
+                                                &#x110;&#x1EE3;t thu a1
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="transactionResultFooter">
+                        <div class="jp-presult-footer">
+                            <div class="jp-presult-btn btn-info-result" id="shareResultPayment">
+                                <div>Chia sẻ</div>
+                            </div>
+                            <a href="/fee-period/code?serviceCode=BANKHUB&amp;orgCode=JBF0000232" target="_blank"
+                                class="jp-presult-btn btn-payment">
+                                <div>Tiếp tục thanh toán</div>
+                            </a>
+                        </div>
+
+                        <div class="dialog hide" id="guideSupportPayment">
+                            <div class="dialog-bg"></div>
+                            <div class="btn-close"></div>
+                            <div class="dialog-modal">
+                                Vui lòng liên hệ hotline 0902 169 097 để được hỗ trợ
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="loading hide">
+                <div class="loader"></div>
+            </div>
+
+
+        </main>
     </div>
-    <button id="saveBtn">Lưu kết quả</button>
-    <button id="shareBtn">Chia sẻ</button>
-    <button id="shareBtn1">Chia sẻ1</button>
-
+    <script src="https://testdcwebsitepayment.jetpay.vn/jetpaylibs/lib/html2canvas-pro.min.js?v=36.1.21"></script>
     <script>
-        async function captureAndSetInput() {
-            const captureArea = document.getElementById("content");
-            // Chụp màn hình khu vực cần thiết
-            const canvas = await html2canvas(captureArea, { useCORS: true, scale: 2 });
-            const dataUrl = canvas.toDataURL("image/png");
 
-            // Chuyển Base64 sang file blob
-            const response = await fetch(dataUrl);
-            const blob = await response.blob();
-            const file = new File([blob], `imagetest.png`, { type: "image/png" });
+        document.getElementById('shareResultPayment').addEventListener('click', async function () {
+            const me = this;
 
-            // Tạo DataTransfer và thêm tệp
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
+            // Ẩn footer tạm thời
+            var boxFooter = document.getElementById('transactionResultFooter');
+            boxFooter.style.display = 'none';
 
-            // Gán FileList vào input file
-            const hiddenInput = document.getElementById('fileInput');
-            hiddenInput.files = dataTransfer.files;
+            const captureArea = document.getElementById("transactionResultJP");
 
-            const file_input = document.querySelector('#fileInput');
-            const files = file_input.disabled ? undefined : file_input.files;
-        };
-
-
-        // document.getElementById('shareBtn').addEventListener('click', async function () {
-        //     const captureArea = document.getElementById("content");
-
-        //     try {
-        //         // Chụp màn hình khu vực cần thiết
-        //         const canvas = await html2canvas(captureArea, { useCORS: true, scale: 2 });
-        //         const dataUrl = canvas.toDataURL("image/png");
-
-        //         // Chuyển Base64 sang file blob
-        //         const response = await fetch(dataUrl);
-        //         const blob = await response.blob();
-        //         const file = new File([blob], `imagetest.png`, { type: "image/png" });
-
-        //         // Tạo DataTransfer và thêm tệp
-        //         const dataTransfer = new DataTransfer();
-        //         dataTransfer.items.add(file);
-
-        //         // Gán FileList vào input file
-        //         const hiddenInput = document.getElementById('fileInput');
-        //         hiddenInput.files = dataTransfer.files;
-
-        //         const file_input = document.querySelector('#fileInput');
-        //         const files = file_input.disabled ? undefined : file_input.files;
-        //         document.getElementById('shareBtn1').click();
-
-        //         // try {
-        //         //     await navigator.share({
-        //         //         files, title: 'Thông báo giao dịch',
-        //         //         text: 'Chia sẻ thông báo giao dịch'
-        //         //     });
-        //         //     logText('Successfully sent share');
-        //         // } catch (error) {
-        //         //     console.log(error);
-        //         // }
-
-        //         // // Kiểm tra nếu Web Share API được hỗ trợ
-        //         // if (navigator.share) {
-        //         //     await navigator.share({
-        //         //         title: 'Thông báo giao dịch',
-        //         //         text: 'Chia sẻ thông báo giao dịch',
-        //         //         files: files//[file], // Chia sẻ file ảnh
-        //         //     });
-        //         //     console.log("Chia sẻ thành công!");
-        //         // } else {
-        //         //     console.log('Navigator share not support');
-        //         //     //alert("Trình duyệt không hỗ trợ chia sẻ hình ảnh.");
-        //         // }
-        //     } catch (error) {
-        //         console.error("Có lỗi xảy ra khi chụp màn hình hoặc chia sẻ:", error);
-        //     }
-        // });
-
-        document.getElementById('shareBtn1').addEventListener('click', async function () {
-            const file_input = document.querySelector('#fileInput');
-            const files = file_input.disabled ? undefined : file_input.files;
-            try {
-                await navigator.share({
-                    files, title: 'Thông báo giao dịch',
-                    text: 'Chia sẻ thông báo giao dịch'
-                });
-                logText('Successfully sent share');
-            } catch (error) {
-                console.log(error);
-            }
-        });
-
-        document.getElementById('saveBtn').addEventListener('click', async function () {
-            // Lấy phần tử cần chụp
-            const captureArea = document.getElementById("content");
             try {
                 // Chụp màn hình khu vực cần thiết
                 const canvas = await html2canvas(captureArea, { useCORS: true, scale: 2 });
                 const dataUrl = canvas.toDataURL("image/png");
 
-                // Tạo một link để tải ảnh
-                const downloadLink = document.createElement("a");
-                downloadLink.href = dataUrl;
-                downloadLink.download = `imagetest.png`; // Tên file khi tải về
-                document.body.appendChild(downloadLink); // Thêm link tạm thời vào DOM
-                downloadLink.click(); // Kích hoạt tải file
-                document.body.removeChild(downloadLink); // Xóa link sau khi tải xong
+                // Chuyển Base64 sang file blob
+                const response = await fetch(dataUrl);
+                const blob = await response.blob();
+                const file = new File([blob], `ndbinhtest.png`, { type: "image/png" });
+
+                // Kiểm tra nếu Web Share API được hỗ trợ
+                if (navigator.share) {
+                    await navigator.share({
+                        title: 'Thông báo giao dịch',
+                        text: 'Chia sẻ thông báo giao dịch',
+                        files: [file], // Chia sẻ file ảnh
+                    });
+                    console.log("Chia sẻ thành công!");
+                } else {
+                    console.log('Navigator share not support');
+                    //alert("Trình duyệt không hỗ trợ chia sẻ hình ảnh.");
+                }
             } catch (error) {
-                console.error("Có lỗi xảy ra khi chụp màn hình hoặc tải ảnh:", error);
+                console.error("Có lỗi xảy ra khi chụp màn hình hoặc chia sẻ:", error);
             }
 
-        });
+            // Hiện lại footer sau khi chụp ảnh
+            boxFooter.style.display = 'block';
 
-        // Gọi hàm chụp ảnh ngay khi giao diện được tải
-        window.addEventListener('load', () => {
-            captureAndSetInput();
         });
     </script>
 </body>
