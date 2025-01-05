@@ -1,28 +1,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JetPay Payment</title>
-
-
-    <!-- Microsoft clarity -->
-    <script type="text/javascript">
-        (function (c, l, a, r, i, t, y) {
-            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-        })(window, document, "clarity", "script", "i9rpb0nxib");
-    </script>
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DTRKP1GFS"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-4DTRKP1GFS');
-    </script>
-
+    <title>NDBINH</title>
 </head>
 
 <body>
@@ -377,7 +356,7 @@
                 <div class="jp-presult-content-box">
                     <div class="jp-presult-content-box_info">
                         <div class="jp-presult-header">
-                            <img src="https://testdcwebsitepayment.jetpay.vn/jetpaylibs/images/icons/ic-payment-success.svg?v=36.1.21"
+                            <img src="https://testdcwebsitepayment.jetpay.vn/jetpaylibs/images/icons/ic-payment-success.svg"
                                 alt="" class="jp-presult-header_icon" />
                             <div class="jp-presult-header_title">
                                 Thanh toán thành công
@@ -471,6 +450,7 @@
             <div class="loading hide">
                 <div class="loader"></div>
             </div>
+            <input type="file" id="fileInput" multiple style="display: none;">
 
 
         </main>
@@ -478,45 +458,48 @@
     <script src="https://testdcwebsitepayment.jetpay.vn/jetpaylibs/lib/html2canvas-pro.min.js?v=36.1.21"></script>
     <script>
 
-        document.getElementById('shareResultPayment').addEventListener('click', async function () {
-            const me = this;
-
-            // Ẩn footer tạm thời
-            var boxFooter = document.getElementById('transactionResultFooter');
-            boxFooter.style.display = 'none';
-
+        async function captureAndSetInput() {
             const captureArea = document.getElementById("transactionResultJP");
+            // Chụp màn hình khu vực cần thiết
+            const canvas = await html2canvas(captureArea, { useCORS: true, scale: 2 });
+            const dataUrl = canvas.toDataURL("image/png");
 
+            // Chuyển Base64 sang file blob
+            const response = await fetch(dataUrl);
+            const blob = await response.blob();
+            const file = new File([blob], `imagetest.png`, { type: "image/png" });
+
+            // Tạo DataTransfer và thêm tệp
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+
+            // Gán FileList vào input file
+            const hiddenInput = document.getElementById('fileInput');
+            hiddenInput.files = dataTransfer.files;
+
+            const file_input = document.querySelector('#fileInput');
+            const files = file_input.disabled ? undefined : file_input.files;
+        };
+
+        document.getElementById('shareResultPayment').addEventListener('click', async function () {
+            const file_input = document.querySelector('#fileInput');
+            const files = file_input.disabled ? undefined : file_input.files;
             try {
-                // Chụp màn hình khu vực cần thiết
-                const canvas = await html2canvas(captureArea, { useCORS: true, scale: 2 });
-                const dataUrl = canvas.toDataURL("image/png");
-
-                // Chuyển Base64 sang file blob
-                const response = await fetch(dataUrl);
-                const blob = await response.blob();
-                const file = new File([blob], `ndbinhtest.png`, { type: "image/png" });
-
-                // Kiểm tra nếu Web Share API được hỗ trợ
-                if (navigator.share) {
-                    await navigator.share({
-                        title: 'Thông báo giao dịch',
-                        text: 'Chia sẻ thông báo giao dịch',
-                        files: [file], // Chia sẻ file ảnh
-                    });
-                    console.log("Chia sẻ thành công!");
-                } else {
-                    console.log('Navigator share not support');
-                    //alert("Trình duyệt không hỗ trợ chia sẻ hình ảnh.");
-                }
+                await navigator.share({
+                    files, title: 'Thông báo giao dịch',
+                    text: 'Chia sẻ thông báo giao dịch'
+                });
+                console.log('Successfully sent share');
             } catch (error) {
-                console.error("Có lỗi xảy ra khi chụp màn hình hoặc chia sẻ:", error);
+                console.log(error);
             }
-
-            // Hiện lại footer sau khi chụp ảnh
-            boxFooter.style.display = 'block';
-
         });
+
+        // Gọi hàm chụp ảnh ngay khi giao diện được tải
+        window.addEventListener('load', () => {
+            captureAndSetInput();
+        });
+
     </script>
 </body>
 
