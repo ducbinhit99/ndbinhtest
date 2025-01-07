@@ -462,12 +462,12 @@
             const captureArea = document.getElementById("transactionResultJP");
             // Chụp màn hình khu vực cần thiết
             const canvas = await html2canvas(captureArea, { useCORS: true, scale: 2 });
-            const dataUrl = canvas.toDataURL("image/png");
+            const dataUrl = canvas.toDataURL("image/jpg");
 
             // Chuyển Base64 sang file blob
             const response = await fetch(dataUrl);
             const blob = await response.blob();
-            const file = new File([blob], `imagetest.png`, { type: "image/png" });
+            const file = new File([blob], `Thongbaothanhtoan07012025JETPAY_202501070842084338_0.jpg`, { type: "image/jpg" });
 
             // Tạo DataTransfer và thêm tệp
             const dataTransfer = new DataTransfer();
