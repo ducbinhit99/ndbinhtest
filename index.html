@@ -467,7 +467,7 @@
             // Chuyển Base64 sang file blob
             const response = await fetch(dataUrl);
             const blob = await response.blob();
-            const file = new File([blob], `Thongbaothanhtoan07012025JETPAY_202501070842084338_0.jpg`, { type: "image/jpg" });
+            const file = new File([blob], `testimage07012025JETPAY_202501070842084338_0.jpg`, { type: "image/jpg" });
 
             // Tạo DataTransfer và thêm tệp
             const dataTransfer = new DataTransfer();
